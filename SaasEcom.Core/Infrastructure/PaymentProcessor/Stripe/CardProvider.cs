@@ -119,7 +119,7 @@ namespace SaasEcom.Core.Infrastructure.PaymentProcessor.Stripe
         {
             var options = new StripeCardCreateOptions
             {
-                Card = new StripeCreditCardOptions
+                Source = new StripeSourceOptions
                 {
                     TokenId = card.StripeToken
                 }

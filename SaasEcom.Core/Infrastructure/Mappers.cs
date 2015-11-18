@@ -25,7 +25,7 @@ namespace SaasEcom.Core.Infrastructure
                 Description = stripeInvoice.Description,
                 // Discount = Map(stripeInvoice.StripeDiscount),
                 EndingBalance = stripeInvoice.EndingBalance,
-                Forgiven = stripeInvoice.Forgiven,
+                Forgiven = stripeInvoice.Forgiven.HasValue && stripeInvoice.Forgiven.Value,
                 NextPaymentAttempt = stripeInvoice.NextPaymentAttempt,
                 Paid = stripeInvoice.Paid,
                 PeriodStart = stripeInvoice.PeriodStart,

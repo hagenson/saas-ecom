@@ -41,7 +41,7 @@ namespace SaasEcom.Core.Infrastructure.PaymentProcessor.Stripe
 
             if (!string.IsNullOrEmpty(cardToken))
             {
-                customer.Card = new StripeCreditCardOptions
+                customer.Source = new StripeSourceOptions
                 {
                     TokenId = cardToken
                 };
@@ -70,7 +70,7 @@ namespace SaasEcom.Core.Infrastructure.PaymentProcessor.Stripe
                 Email = user.Email,
 
                 // Card Details
-                Card =  new StripeCreditCardOptions
+                Source =  new StripeSourceOptions
                 {
                     TokenId = card.StripeToken
                 }
