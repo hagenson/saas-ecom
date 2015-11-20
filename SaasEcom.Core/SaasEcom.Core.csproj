@@ -115,6 +115,7 @@
     <Compile Include="Infrastructure\PaymentProcessor\Interfaces\ICustomerProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Interfaces\ISubscriptionPlanProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Interfaces\ISubscriptionProvider.cs" />
+    <Compile Include="Infrastructure\PaymentProcessor\Internal\InternalSubscriptionProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Stripe\CardProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Stripe\ChargeProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Stripe\CustomerProvider.cs" />
