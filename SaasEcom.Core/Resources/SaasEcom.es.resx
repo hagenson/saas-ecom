@@ -204,6 +204,9 @@
   <data name="SubscriptionInterval_Monthly_Monthly" xml:space="preserve">
     <value>Mensualmente</value>
   </data>
+  <data name="SubscriptionInterval_Oneoff_Oneoff" xml:space="preserve">
+    <value>?? One-off item ??</value>
+  </data>
   <data name="SubscriptionInterval_Weekly_Weekly" xml:space="preserve">
     <value>Semanalmente</value>
   </data>

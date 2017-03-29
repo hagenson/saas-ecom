@@ -45,6 +45,8 @@ namespace SaasEcom.Core.DataServices.Interfaces
         Task<Subscription> SubscribeUserAsync(SaasEcomUser user, string planId, DateTime? trialPeriodEnds = null,
             decimal taxPercent = 0, string stripeId = null);
 
+        Task<Subscription> SubscribeUserAtDateAsync(string userId, string planId, DateTime startDate, decimal taxPercent = 0, string stripeId = null);
+
         /// <summary>
         /// Gets the User's subscriptions asynchronous.
         /// </summary>
@@ -65,6 +67,15 @@ namespace SaasEcom.Core.DataServices.Interfaces
         /// <param name="userId">The user identifier.</param>
         /// <returns>The list of Subscriptions</returns>
         Task<List<Subscription>> UserActiveSubscriptionsAsync(string userId);
+
+        /// <summary>
+        /// Gets any one-off charges the user incurred during in the specified period
+        /// </summary>
+        /// <param name="userId">ID of the user.</param>
+        /// <param name="startDate">Start of the charging period.</param>
+        /// <param name="endDate">End of the charging period.</param>
+        /// <returns>List of any one-off charges that have been billed to the user during the specified period.</returns>
+        Task<List<Subscription>> UserOneOffChargesAsync(string userId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Ends the subscription asynchronous.
@@ -93,8 +104,11 @@ namespace SaasEcom.Core.DataServices.Interfaces
         /// <summary>
         /// Deletes the subscriptions asynchronous.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="subscriptionId">The subscription identifier.</param>
         /// <returns></returns>
-        Task DeleteSubscriptionsAsync(string userId);
+        Task DeleteSubscriptionsAsync(string subscriptionId);
+
+
+        Task<Subscription> GetByIdAsync(int subscriptionId);
     }
 }

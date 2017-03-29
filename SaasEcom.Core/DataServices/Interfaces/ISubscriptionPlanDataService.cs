@@ -16,6 +16,12 @@ namespace SaasEcom.Core.DataServices.Interfaces
         Task<List<SubscriptionPlan>> GetAllAsync();
 
         /// <summary>
+        /// Gets all one-off charges asynchronously.
+        /// </summary>
+        /// <returns>List of Subscription Plans with one-off interval.</returns>
+        Task<List<SubscriptionPlan>> GetOneOffChargesAsync();
+
+        /// <summary>
         /// Finds the subscription plans asynchronous.
         /// </summary>
         /// <param name="subscriptionPlanId">The subscription plan identifier.</param>

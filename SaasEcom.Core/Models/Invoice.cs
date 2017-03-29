@@ -12,13 +12,13 @@ namespace SaasEcom.Core.Models
     /// Once an invoice is created, payment is automatically attempted. Note that the payment, while automatic, does not happen exactly at the time of invoice creation. If you have configured webhooks, the invoice will wait until one hour after the last webhook is successfully sent (or the last webhook times out after failing).
     /// Any customer credit on the account is applied before determining how much is due for that invoice (the amount that will be actually charged). If the amount due for the invoice is less than 50 cents (the minimum for a charge), we add the amount to the customer's running account balance to be added to the next invoice. If this amount is negative, it will act as a credit to offset the next invoice. Note that the customer account balance does not include unpaid invoices; it only includes balances that need to be taken into account when calculating the amount due for the next invoice.
     /// </summary>
-    public class Invoice
+    public class Invoice: ITransaction
     {
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Gets and sets the Invoice ID.
         /// </summary>
         /// <value>
-        /// The identifier.
+        /// The invoice ID.
         /// </value>
         public int Id { get; set; }
 
@@ -28,7 +28,6 @@ namespace SaasEcom.Core.Models
         /// <value>
         /// The stripe identifier.
         /// </value>
-        [Index(IsUnique = true)]
         [MaxLength(50)]
         public string StripeId { get; set; }
 
@@ -51,13 +50,23 @@ namespace SaasEcom.Core.Models
         public virtual SaasEcomUser Customer { get; set; }
 
         /// <summary>
-        /// Gets or sets the date.
+        /// Gets and sets the invoice date.
         /// </summary>
         /// <value>
-        /// The date.
+        /// The invoice date.
         /// </value>
         public DateTime? Date { get; set; }
-        
+  
+        /// <summary>
+        /// Transaction mappping for the invoice date.
+        /// </summary>
+        DateTime ITransaction.Date
+        {
+            get
+            {
+                return this.Date ?? DateTime.MinValue;
+            }
+        }
         /// <summary>
         /// Gets or sets the period start.
         /// </summary>
@@ -98,7 +107,19 @@ namespace SaasEcom.Core.Models
         /// <value>
         /// The total.
         /// </value>
-        public int? Total { get; set; }
+        public int? Total {get; set; }
+
+        /// <summary>
+        /// Transaction mapping for the invoice total.
+        /// </summary>
+        int ITransaction.Amount
+        {
+            get
+            {
+                return 0 - (this.Total ?? 0);
+            }
+
+        }
 
         /// <summary>
         /// Gets or sets the attempted.
@@ -212,6 +233,8 @@ namespace SaasEcom.Core.Models
         /// </value>
         public virtual BillingAddress BillingAddress { get; set; }
 
+        public ICollection<Reconciliation> Reconciliations { get; set; }
+
         /// <summary>
         /// Gets the currency details.
         /// </summary>
@@ -241,12 +264,15 @@ namespace SaasEcom.Core.Models
                 if (LineItems != null && LineItems.Any())
                 {
                     var p = LineItems.First();
-                    start = p.Period.Start;
-                    end = p.Period.End;
+                    if (!start.HasValue)
+                        start = p.Period.Start;
+                    if (!end.HasValue)
+                        end = p.Period.End;
                 }
 
                 return string.Format("{0} - {1}", start.Value.ToString("d MMM yyyy"), end.Value.ToString("d MMM yyyy"));
             }
+
         }
 
         /// <summary>
@@ -281,6 +307,10 @@ namespace SaasEcom.Core.Models
         ///   <c>true</c> if forgiven; otherwise, <c>false</c>.
         /// </value>
         public bool Forgiven { get; set; }
+
+        public int? InvoiceRun_Id { get; set; }
+
+        public bool Sent { get; set; }
 
         /// <summary>
         /// Invoice Line Item
@@ -398,6 +428,13 @@ namespace SaasEcom.Core.Models
             public string StripePlanId { get; set; }
 
             /// <summary>
+            /// Gets and sets the internal plan identifier.
+            /// </summary>
+            [MaxLength(128)]
+///            [ForeignKey("SubscriptionPlans")]
+            public string SubscriptionPlanId { get; set; }
+
+            /// <summary>
             /// Gets or sets the interval.
             /// One of day, week, month or year. The frequency with which a subscription should be billed.
             /// </summary>
@@ -465,6 +502,7 @@ namespace SaasEcom.Core.Models
             /// The statement descriptor.
             /// </value>
             public string StatementDescriptor { get; set; }
+
         }
     }
 }

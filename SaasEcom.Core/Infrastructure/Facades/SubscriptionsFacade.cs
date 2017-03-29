@@ -27,6 +27,9 @@ namespace SaasEcom.Core.Infrastructure.Facades
         private readonly IChargeProvider _chargeProvider;
         private readonly ICardProvider _cardProvider;
         private readonly ICardDataService _cardDataService;
+        private readonly IBillingPeriodDataService _billingPeriods;
+        private readonly IUserDataService _users;
+        private readonly IOneOffChargeDataService _oneOffCharges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionsFacade" /> class.
@@ -45,7 +48,10 @@ namespace SaasEcom.Core.Infrastructure.Facades
             ICardDataService cardDataService,
             ICustomerProvider customerProvider,
             ISubscriptionPlanDataService subscriptionPlanDataService,
-            IChargeProvider chargeProvider)
+            IChargeProvider chargeProvider,
+            IBillingPeriodDataService billingPeriods,
+            IUserDataService users,
+            IOneOffChargeDataService oneOffCharges)
         {
             _subscriptionDataService = data;
             _subscriptionProvider = subscriptionProvider;
@@ -54,6 +60,9 @@ namespace SaasEcom.Core.Infrastructure.Facades
             _subscriptionPlanDataService = subscriptionPlanDataService;
             _chargeProvider = chargeProvider;
             _cardDataService = cardDataService;
+            _billingPeriods = billingPeriods;
+            _users = users;
+            _oneOffCharges = oneOffCharges;
         }
 
         /// <summary>
@@ -180,6 +189,87 @@ namespace SaasEcom.Core.Infrastructure.Facades
             return subscriptionEnd;
         }
 
+        public async Task<DateTime> ReplaceSubscriptionAsync(int subscriptionId, string newPlanId, bool allowDowngradeInCurrentPeriod)
+        {
+            DateTime result = DateTime.Now;
+            var newPlan = await _subscriptionPlanDataService.FindAsync(newPlanId);
+            DateTime periodStart = DateTime.Now;
+            DateTime periodEnd = DateTime.Now;
+            BillingPeriod billingPeriod = await _billingPeriods.GetAsync(newPlan.Interval);
+            billingPeriod.GetPeriodBounds(DateTime.Now, out periodStart, out periodEnd);
+
+            Subscription curSub = await _subscriptionDataService.GetByIdAsync(subscriptionId);
+            List<Subscription> subs = await _subscriptionDataService.UserSubscriptionsAsync(curSub.UserId);
+            
+            Subscription nxtSub = null;
+            if (curSub.End.HasValue)
+            {
+                // There must a queued next sub to deal with
+                nxtSub = subs.SingleOrDefault(s => s.SubscriptionPlan.Interval == newPlan.Interval
+                && s.Start.HasValue && s.Start.Value ==  curSub.End.Value
+                && (!s.End.HasValue || s.End.Value > s.Start.Value));
+            }
+
+
+            if (allowDowngradeInCurrentPeriod || newPlan.Price > curSub.SubscriptionPlan.Price)
+            {
+                // Either upgrading or allowing downgrade in the current period
+                // End the current sub at the start of the period
+                await _subscriptionDataService.EndSubscriptionAsync(curSub.Id, periodStart, "Upgrading subscription.");
+                // Create a new sub with new plan
+                var newSub = await _subscriptionDataService.SubscribeUserAtDateAsync(curSub.UserId, newPlanId, periodStart, curSub.TaxPercent);
+                // Delete the next sub if there is one
+                if(nxtSub != null)
+                    await _subscriptionDataService.DeleteSubscriptionsAsync(nxtSub.Id.ToString());
+
+                // Do we need to put pro-rata bill in next periiod?
+                Invoice invoice = curSub.User.Invoices.OrderBy(i => i.Date).LastOrDefault();
+                if (invoice != null && invoice.Date < periodStart)
+                {
+                  // Yes - work out the rate
+                  double proRata = ((newSub.Quantity * newSub.SubscriptionPlan.Price) - (curSub.Quantity * curSub.SubscriptionPlan.Price)) * 100;
+
+                  // Push a one off into the next month
+                  OneOffCharge charge = new OneOffCharge
+                  {
+                    Amount = (int)proRata,
+                    Category = "Upgrade",
+                    Date = DateTime.Now,
+                    Description = String.Format("Upgrade previous period {0} -> {1}", curSub.SubscriptionPlan.Name, newSub.SubscriptionPlan.Name),
+                    Reference = newSub.Id.ToString(),
+                    TaxPercent = newSub.TaxPercent,
+                    CustomerId = newSub.UserId
+                  };
+                  await _oneOffCharges.SaveAsync(charge);
+                }
+                result = periodStart;
+            }
+            else
+            {
+                // End the current sub at the end of the period
+                await _subscriptionDataService.EndSubscriptionAsync(curSub.Id, periodEnd, "Upgrading subscription.");                
+                // Downgrade in following period
+                if (nxtSub == null)
+                {
+                    await _subscriptionDataService.SubscribeUserAtDateAsync(curSub.UserId, newPlanId, periodEnd, curSub.TaxPercent);
+                }
+                else
+                {
+                    nxtSub.Quantity = 1;
+                    nxtSub.ReasonToCancel = null;
+                    nxtSub.Start = periodEnd;
+                    nxtSub.SubscriptionPlanId = newPlanId;
+                    await _subscriptionDataService.UpdateSubscriptionAsync(nxtSub);
+                }
+
+                result = periodEnd;
+            }
+
+            // TODO: Update Stripe at Date
+            // _subscriptionProvider.UpdateSubscription(stripeUserId, curSub.StripeId, newPlanId, false);
+             return result;
+        }
+
         // TODO: Maybe remove this method?
         /// <summary>
         /// Change Subscription Plan (Upgrade / Downgrade) (When the user can have only one active subscription)
@@ -282,6 +372,11 @@ namespace SaasEcom.Core.Infrastructure.Facades
             return await _subscriptionDataService.UserActiveSubscriptionsAsync(userId);
         }
 
+        public async Task<List<Subscription>> UserOneOffCharges(string userId, DateTime startDate, DateTime endDate)
+        {
+          return await _subscriptionDataService.UserOneOffChargesAsync(userId, startDate, endDate);
+        }
+
         // TODO: Pass the subscription Id
         /// <summary>This method returns the number of days of trial left for a given user. It will return 0 if there aren't any days left or no active subscriptions for the user.</summary>
         /// <param name="userId">The user identifier.</param>
@@ -342,11 +437,11 @@ namespace SaasEcom.Core.Infrastructure.Facades
         /// <summary>
         /// Deletes the subscriptions.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="subscriptionId">The user identifier.</param>
         /// <returns></returns>
-        public async Task DeleteSubscriptions(string userId)
+        public async Task DeleteSubscriptions(string subscriptionId)
         {
-            await this._subscriptionDataService.DeleteSubscriptionsAsync(userId);
+            await this._subscriptionDataService.DeleteSubscriptionsAsync(subscriptionId);
         }
 
         #region Helpers
@@ -396,5 +491,11 @@ namespace SaasEcom.Core.Infrastructure.Facades
                 stripeUser.StripeSubscriptionList.Data.First().Id : null;
         }
         #endregion
+
+        public async Task SubscribeUserForPeriodAsync(string userId, string planId, DateTime startDate, DateTime endDate)
+        {
+          Subscription sub = await _subscriptionDataService.SubscribeUserAtDateAsync(userId, planId, startDate);
+          await _subscriptionDataService.EndSubscriptionAsync(sub.Id, endDate, "One off purchase");
+        }
     }
 }

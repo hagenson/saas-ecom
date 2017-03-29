@@ -51,6 +51,17 @@ namespace SaasEcom.Core.DataServices
         /// </value>
         DbSet<CreditCard> CreditCards { get; set; }
 
+
+        DbSet<Payment> Payments { get; set; }
+
+        DbSet<Setting> Settings { get; set; }
+
+        DbSet<BillingPeriod> BillingPeriods { get; set; }
+
+        DbSet<InvoiceRun> InvoiceRuns { get; set; }
+
+        DbSet<OneOffCharge> OneOffCharges { get; set; }
+
         /// <summary>
         /// Saves the changes asynchronous.
         /// </summary>

@@ -114,6 +114,12 @@ namespace SaasEcom.Core.Models
         /// </value>
         public string ReasonToCancel { get; set; }
 
+
+        /// <summary>
+        /// The number of subscriptions taken.
+        /// </summary>
+        public int Quantity { get; set; }
+
         /// <summary>
         /// Determines whether this instance is trialing.
         /// </summary>

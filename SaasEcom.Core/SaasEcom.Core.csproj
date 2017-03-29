@@ -33,53 +33,46 @@
     <DocumentationFile>bin\Release\SaasEcom.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\IspManager\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\IspManager\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\IspManager\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\IspManager\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\IspManager\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\..\IspManager\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\IspManager\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\..\IspManager\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\..\IspManager\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\..\IspManager\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IspManager\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <HintPath>..\..\IspManager\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Stripe.net, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\visual studio 2013\Projects\PlaySaas\packages\Stripe.net.5.0.0\lib\net40\Stripe.net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Stripe.net, Version=5.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IspManager\packages\Stripe.net.5.1.2\lib\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -94,18 +87,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataServices\Interfaces\IBillingPeriodDataService.cs" />
     <Compile Include="DataServices\Interfaces\ICardDataService.cs" />
     <Compile Include="DataServices\Interfaces\IInvoiceDataService.cs" />
+    <Compile Include="DataServices\Interfaces\InvoiceRunType.cs" />
+    <Compile Include="DataServices\Interfaces\IOneOffChargeDataService.cs" />
+    <Compile Include="DataServices\Interfaces\IPaymentDataService.cs" />
+    <Compile Include="DataServices\Interfaces\IPaymentParser.cs" />
+    <Compile Include="DataServices\Interfaces\ISettingsDataService.cs" />
     <Compile Include="DataServices\Interfaces\ISubscriptionDataService.cs" />
     <Compile Include="DataServices\Interfaces\ISubscriptionPlanDataService.cs" />
+    <Compile Include="DataServices\Interfaces\ITransactionLoader.cs" />
+    <Compile Include="DataServices\Interfaces\IUserDataService.cs" />
     <Compile Include="DataServices\SaasEcomDbContext.cs" />
+    <Compile Include="DataServices\Storage\BillingPeriodDataService.cs" />
     <Compile Include="DataServices\Storage\CardDataService.cs" />
     <Compile Include="DataServices\Storage\InvoiceDataService.cs" />
+    <Compile Include="DataServices\Storage\OneOffChargeDataService.cs" />
+    <Compile Include="DataServices\Storage\PaymentDataService.cs" />
+    <Compile Include="DataServices\Storage\SettingsDataService.cs" />
     <Compile Include="DataServices\Storage\SubscriptionDataService.cs" />
     <Compile Include="DataServices\Storage\SubscriptionPlanDataService.cs" />
     <Compile Include="DataServices\IDbContext.cs" />
+    <Compile Include="DataServices\Storage\UserDataService.cs" />
+    <Compile Include="Infrastructure\Facades\AccountFacade.cs" />
+    <Compile Include="Infrastructure\Facades\AccountSummary.cs" />
+    <Compile Include="Infrastructure\Facades\BillingFacade.cs" />
+    <Compile Include="Infrastructure\Facades\PaymentsFacade.cs" />
     <Compile Include="Infrastructure\Facades\SubscriptionPlansFacade.cs" />
     <Compile Include="Infrastructure\Facades\SubscriptionsFacade.cs" />
+    <Compile Include="Infrastructure\Facades\TransactionFacade.cs" />
+    <Compile Include="Infrastructure\Facades\UserFacade.cs" />
     <Compile Include="Infrastructure\Helpers\CurrencyHelper.cs" />
     <Compile Include="Infrastructure\Helpers\EuropeanVat.cs" />
     <Compile Include="Infrastructure\Helpers\GeoLocation.cs" />
@@ -122,12 +134,20 @@
     <Compile Include="Infrastructure\PaymentProcessor\Stripe\SubscriptionPlanProvider.cs" />
     <Compile Include="Infrastructure\PaymentProcessor\Stripe\SubscriptionProvider.cs" />
     <Compile Include="Models\BillingAddress.cs" />
+    <Compile Include="Models\BillingPeriod.cs" />
+    <Compile Include="Models\InvoiceRun.cs" />
+    <Compile Include="Models\OneOffCharge.cs" />
+    <Compile Include="Models\Payment.cs" />
+    <Compile Include="Models\Reconciliation.cs" />
     <Compile Include="Models\SaasEcomUser.cs" />
     <Compile Include="Models\CreditCard.cs" />
     <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\SubscriptionInterval.cs" />
     <Compile Include="Models\SubscriptionPlan.cs" />
     <Compile Include="Models\SubscriptionPlanProperty.cs" />
+    <Compile Include="Models\ITransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\SaasEcom.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -135,6 +155,7 @@
       <DependentUpon>SaasEcom.resx</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

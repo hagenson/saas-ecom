@@ -12,17 +12,16 @@ namespace SaasEcom.Core.DataServices.Interfaces
         /// <summary>
         /// Gets the User's invoices asynchronous.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="customerId">The user identifier.</param>
         /// <returns>List of invoices.</returns>
-        Task<List<Invoice>> UserInvoicesAsync(string userId);
+        Task<List<Invoice>> ListForCustomerAsync(string customerId);
 
         /// <summary>
         /// Gets the invoice given a users identifier and the invoice identifier.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
         /// <param name="invoiceId">The invoice identifier.</param>
         /// <returns>The invoice</returns>
-        Task<Invoice> UserInvoiceAsync(string userId, int invoiceId);
+        Task<Invoice> InvoiceAsync(int invoiceId);
 
         /// <summary>
         /// Creates the or update asynchronous.
@@ -36,5 +35,19 @@ namespace SaasEcom.Core.DataServices.Interfaces
         /// </summary>
         /// <returns>List of invoices.</returns>
         Task<List<Invoice>> GetInvoicesAsync();
+
+        Task<List<InvoiceRun>> ListInvoiceRunsAsync(SubscriptionInterval interval, InvoiceRunType types);
+
+        Task<InvoiceRun> GetInvoiceRunAsync(int id);
+
+        Task<InvoiceRun> CreateOrUpdateRunAsync(InvoiceRun run);
+
+        Task CloseInvoiceRunAsync(int invoiceRunId);
+
+        Task<List<Invoice>> ListInvoicesForRunAsync(int invoiceRunId);
+
+        Task<List<Invoice>> GetInvoicesAsync(IEnumerable<int> ids);
+
+        Task<List<Invoice>> ListUnpaidInvoices();
     }
 }

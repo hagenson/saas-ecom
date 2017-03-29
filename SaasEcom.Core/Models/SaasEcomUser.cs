@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations;
 
 namespace SaasEcom.Core.Models
 {
@@ -93,6 +94,8 @@ namespace SaasEcom.Core.Models
         /// </value>
         public string IPAddressCountry { get; set; }
 
+        public string KnownAs { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="SaasEcomUser"/> is delinquent. Whether or not the latest charge for the customer’s latest invoice has failed
         /// </summary>
@@ -109,6 +112,21 @@ namespace SaasEcom.Core.Models
         /// </value>
         public decimal LifetimeValue { get; set; }
 
+        /// <summary>
+        /// The billing address for post-paid subscribers.
+        /// </summary>
+        public BillingAddress BillingAddress { get; set; }
+
+        /// <summary>
+        /// The customers account number for billing and enquiries.
+        /// </summary>
+        /// <remarks>
+        /// This is limited to 12 because bank transfer reference field is limited to 12 chars.
+        /// </remarks>
+        [StringLength(12)]
+        public string AccountNumber { get; set; }
+
+        
         /// <summary>
         /// Generates the user identity asynchronous.
         /// </summary>

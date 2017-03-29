@@ -1,23 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SaasEcom.Core.Models.CreditCard" Collapsed="true">
-    <Position X="2.5" Y="4.75" Width="1.5" />
+    <Position X="2.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAACAAAAIACAAAIBAEAACARACAAAoCgAAQAACAAQAAA=</HashCode>
       <FileName>Models\CreditCard.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SaasEcom.Core.Models.Invoice" Collapsed="true">
-    <Position X="0.5" Y="4.75" Width="1.5" />
+  <Class Name="SaasEcom.Core.Models.Invoice">
+    <Position X="0.75" Y="5.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="SaasEcom.Core.Models.Invoice.LineItem" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Invoice.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="SaasEcom.Core.Models.Invoice.Period" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Invoice.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="SaasEcom.Core.Models.Invoice.Plan" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Invoice.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>ABEGgAJAAAQkAEIAAEAiAAAACAAAQAABAgCAAECAAEA=</HashCode>
+      <HashCode>BFEGgAJAEAAkAEIAAEAiAAAASAAAQAABAACAAECAAEA=</HashCode>
       <FileName>Models\Invoice.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SaasEcom.Core.Models.Subscription">
     <Position X="4.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIDAAAEACAAAAIJgAAAAAhAACAAAACAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAIDAAAEACAEAAIJgAAAAAhAQCAAAACAAAAAgAAAAAA=</HashCode>
       <FileName>Models\Subscription.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -34,15 +51,30 @@
   <Class Name="SaasEcom.Core.Models.SaasEcomUser">
     <Position X="0.5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAACAAAAEgAAACAAAAAQQAAAAAAAAAEACICQAg=</HashCode>
+      <HashCode>AAAAAEEAGAAAAEgAAACAAAAAQQAAAAAAAAAEBCICQAg=</HashCode>
       <FileName>Models\SaasEcomUser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SaasEcom.Core.Models.BillingAddress">
     <Position X="6.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAACAAAAIAAAAAAQAAAIAAAABAAAABAAQAAA=</HashCode>
+      <HashCode>AAAAAAAAAACAAAAIAAAAAAQAAAIAAAABAAAABAAQABA=</HashCode>
       <FileName>Models\BillingAddress.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SaasEcom.Core.Models.Payment">
+    <Position X="6.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAAAAAgAACAAAAAABABAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Payment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SaasEcom.Core.Models.Reconciliation">
+    <Position X="3.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAAAAAAAAAAAACAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Reconciliation.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -115,7 +115,7 @@ namespace SaasEcom.Core.Models
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        /// <exception cref="System.Exception">Property for key:  + key + does not exist.</exception>
+        /// <exception cref="System.Exception">Amount for key:  + key + does not exist.</exception>
         public int GetPropertyInt(string key)
         {
             var property = this.Properties.Where(i => key != null && i.Key == key).Select(i => i.Value).FirstOrDefault();
@@ -125,7 +125,7 @@ namespace SaasEcom.Core.Models
                 return int.Parse(property);
             }
              
-            throw new Exception("Property for key: " + key + "does not exist.");
+            throw new Exception("Amount for key: " + key + "does not exist.");
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace SaasEcom.Core.Models
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        /// <exception cref="System.Exception">Property for key:  + key + does not exist.</exception>
+        /// <exception cref="System.Exception">Amount for key:  + key + does not exist.</exception>
         public long GetPropertyLong(string key)
         {
             var property = this.Properties.Where(i => key != null && i.Key == key).Select(i => i.Value).FirstOrDefault();
@@ -143,43 +143,7 @@ namespace SaasEcom.Core.Models
                 return long.Parse(property);
             }
 
-            throw new Exception("Property for key: " + key + "does not exist.");
-        }
-
-        /// <summary>
-        /// Subscription Interval
-        /// </summary>
-        public enum SubscriptionInterval
-        {
-            /// <summary>
-            /// Monthly
-            /// </summary>
-            [Display(ResourceType = typeof (Resources.SaasEcom), Name = "SubscriptionInterval_Monthly_Monthly")]
-            Monthly = 1,
-
-            /// <summary>
-            /// Yearly
-            /// </summary>
-            [Display(ResourceType = typeof (Resources.SaasEcom), Name = "SubscriptionInterval_Yearly_Yearly")]
-            Yearly = 2,
-
-            /// <summary>
-            /// Weekly
-            /// </summary>
-            [Display(ResourceType = typeof (Resources.SaasEcom), Name = "SubscriptionInterval_Weekly_Weekly")]
-            Weekly = 3,
-
-            /// <summary>
-            /// Every 6 months
-            /// </summary>
-            [Display(ResourceType = typeof (Resources.SaasEcom), Name = "SubscriptionInterval_EverySixMonths_Every_6_months")]
-            EverySixMonths = 4,
-
-            /// <summary>
-            /// Every 3 months
-            /// </summary>
-            [Display(ResourceType = typeof (Resources.SaasEcom), Name = "SubscriptionInterval_EveryThreeMonths_Every_3_months")]
-            EveryThreeMonths = 5
-        }
+            throw new Exception("Amount for key: " + key + "does not exist.");
+        }        
     }
 }

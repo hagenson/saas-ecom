@@ -2,6 +2,7 @@
 using System.Linq;
 using SaasEcom.Core.Models;
 using Stripe;
+using System;
 
 namespace SaasEcom.Core.Infrastructure
 {
@@ -21,7 +22,7 @@ namespace SaasEcom.Core.Infrastructure
                 Attempted = stripeInvoice.Attempted,
                 Closed = stripeInvoice.Closed,
                 Currency = stripeInvoice.Currency,
-                Date = stripeInvoice.Date,
+                Date = stripeInvoice.Date ?? DateTime.MinValue,
                 Description = stripeInvoice.Description,
                 // Discount = Map(stripeInvoice.StripeDiscount),
                 EndingBalance = stripeInvoice.EndingBalance,

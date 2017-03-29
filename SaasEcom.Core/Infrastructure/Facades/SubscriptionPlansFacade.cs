@@ -36,6 +36,15 @@ namespace SaasEcom.Core.Infrastructure.Facades
         }
 
         /// <summary>
+        /// Gets all one-off charges asynchronously.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<SubscriptionPlan>> GetOneOffChargesAsync()
+        {
+            return await _subscriptionDataService.GetOneOffChargesAsync();
+        }
+
+        /// <summary>
         /// Adds the subscription plan asynchronous.
         /// </summary>
         /// <param name="subscriptionPlan">The subscription plan.</param>

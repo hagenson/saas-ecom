@@ -39,6 +39,11 @@ namespace SaasEcom.Core.DataServices.Storage
             return _dbContext.Subscriptions.FirstOrDefault(s => s.StripeId == stripeSubscriptionId);
         }
 
+        public Task<Subscription> GetByIdAsync(int id)
+        {
+            return _dbContext.Subscriptions.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
         /// <summary>
         /// Subscribes the user asynchronous.
         /// </summary>
@@ -70,7 +75,8 @@ namespace SaasEcom.Core.DataServices.Storage
                 SubscriptionPlan = plan,
                 Status = trialPeriodInDays == null ? "active" : "trialing",
                 TaxPercent = taxPercent,
-                StripeId = stripeId
+                StripeId = stripeId,
+                Quantity = 1
             };
 
             _dbContext.Subscriptions.Add(s);
@@ -110,7 +116,35 @@ namespace SaasEcom.Core.DataServices.Storage
                 SubscriptionPlan = plan,
                 Status = trialPeriodEnds == null ? "active" : "trialing",
                 TaxPercent = taxPercent,
-                StripeId = stripeId
+                StripeId = stripeId,
+                Quantity = 1
+            };
+
+            _dbContext.Subscriptions.Add(s);
+            await _dbContext.SaveChangesAsync();
+
+            return s;
+        }
+
+        public async Task<Subscription> SubscribeUserAtDateAsync(string userId, string planId, DateTime startDate, decimal taxPercent = 0, string stripeId = null)
+        {
+            var plan = await _dbContext.SubscriptionPlans.FirstOrDefaultAsync(x => x.Id == planId);
+
+            if (plan == null)
+            {
+                throw new ArgumentException(string.Format("There's no plan with Id: {0}", planId));
+            }
+
+            var s = new Subscription
+            {
+                Start = startDate,
+                End = null,
+                UserId = userId,
+                SubscriptionPlan = plan,
+                Status = "active",
+                TaxPercent = taxPercent,
+                StripeId = stripeId,
+                Quantity = 1
             };
 
             _dbContext.Subscriptions.Add(s);
@@ -138,7 +172,8 @@ namespace SaasEcom.Core.DataServices.Storage
         /// <returns></returns>
         public async Task<List<Subscription>> UserSubscriptionsAsync(string userId)
         {
-            return await _dbContext.Subscriptions.Where(s => s.User.Id == userId).Select(s => s).ToListAsync();
+            return await _dbContext.Subscriptions.Where(s => s.User.Id == userId
+                && s.SubscriptionPlan.Interval > SubscriptionInterval.OneOff).Select(s => s).ToListAsync();
         }
 
         /// <summary>
@@ -153,6 +188,7 @@ namespace SaasEcom.Core.DataServices.Storage
             return await _dbContext.Subscriptions
                 .Where(s => s.User.Id == userId && s.Status != "canceled" && s.Status != "unpaid")
                 .Where(s => s.End == null || s.End > DateTime.UtcNow)
+                .Where(s => s.SubscriptionPlan.Interval > SubscriptionInterval.OneOff)
                 .Include(s => s.SubscriptionPlan.Properties)
                 .Select(s => s).ToListAsync();
         }
@@ -202,17 +238,29 @@ namespace SaasEcom.Core.DataServices.Storage
         /// <summary>
         /// Deletes the subscriptions asynchronous.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="subscriptionId">The user identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public async Task DeleteSubscriptionsAsync(string userId)
+        public async Task DeleteSubscriptionsAsync(string subscriptionId)
         {
-            foreach (var subscription in _dbContext.Subscriptions.Where(s => s.UserId == userId).Select(s =>s))
+            int id = int.Parse(subscriptionId);
+            foreach (var subscription in _dbContext.Subscriptions.Where(s => s.Id == id).Select(s =>s))
             {
                 _dbContext.Subscriptions.Remove(subscription);
             }
 
             await _dbContext.SaveChangesAsync();
+        }
+
+
+        public async Task<List<Subscription>> UserOneOffChargesAsync(string userId, DateTime startDate, DateTime endDate)
+        {
+            return await _dbContext.Subscriptions
+                .Where(s => s.User.Id == userId && s.Status != "canceled" && s.Status != "unpaid")
+                .Where(s => s.SubscriptionPlan.Interval == SubscriptionInterval.OneOff)
+                .Where(s => s.Start >= startDate && s.Start <= endDate)
+                .Include(s => s.SubscriptionPlan.Properties)
+                .Select(s => s).ToListAsync();
         }
     }
 }

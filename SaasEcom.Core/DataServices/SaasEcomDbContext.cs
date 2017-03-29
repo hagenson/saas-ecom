@@ -80,6 +80,15 @@ namespace SaasEcom.Core.DataServices
         /// </value>
         public DbSet<CreditCard> CreditCards { get; set; }
 
+        public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<BillingPeriod> BillingPeriods { get; set; }
+
+        public DbSet<InvoiceRun> InvoiceRuns { get; set; }
+
+        public DbSet<OneOffCharge> OneOffCharges { get; set; }
         /// <summary>
         /// Saves the changes asynchronous.
         /// </summary>

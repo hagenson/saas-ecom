@@ -36,9 +36,23 @@ namespace SaasEcom.Core.DataServices.Storage
         /// </returns>
         public Task<List<SubscriptionPlan>> GetAllAsync()
         {
-            return _dbContext.SubscriptionPlans.Include(sp => sp.Properties).ToListAsync();
+            return _dbContext.SubscriptionPlans
+              .Where(sp => sp.Interval > SubscriptionInterval.OneOff)
+              .Include(sp => sp.Properties).ToListAsync();
         }
 
+        /// <summary>
+        /// Gets all one-off charges asynchronously.
+        /// </summary>
+        /// <returns>
+        /// List of Subscription Plans that are one-off charges
+        /// </returns>
+        public Task<List<SubscriptionPlan>> GetOneOffChargesAsync()
+        {
+            return _dbContext.SubscriptionPlans
+              .Where(sp => sp.Interval == SubscriptionInterval.OneOff)
+              .Include(sp => sp.Properties).ToListAsync();
+        }
 
         /// <summary>
         /// Finds the subscription plan asynchronously.

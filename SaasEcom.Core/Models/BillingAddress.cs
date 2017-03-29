@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SaasEcom.Core.Models
@@ -7,7 +9,7 @@ namespace SaasEcom.Core.Models
     /// Class that represents a billing Address for a customer
     /// </summary>
     [ComplexType]
-    public class BillingAddress
+    public class BillingAddress: ICloneable
     {
         /// <summary>
         /// Gets or sets the name of the person / company.
@@ -80,5 +82,42 @@ namespace SaasEcom.Core.Models
         /// </value>
         [Display(ResourceType = typeof (Resources.SaasEcom), Name = "BillingAddress_Vat_VAT_Number")]
         public string Vat { get; set; }
+
+        public object Clone()
+        {
+            BillingAddress result = new BillingAddress
+            {
+                AddressLine1 = this.AddressLine1,
+                AddressLine2 = this.AddressLine2,
+                City = this.City,
+                Country = this.Country,
+                Name = this.Name,
+                State = this.State,
+                Vat = this.Vat,
+                ZipCode = this.ZipCode
+            };
+            return result;
+        }
+
+        public override string ToString()
+        {
+            string[] lines = new string[]
+            {
+                Name,
+                AddressLine1,
+                AddressLine2,
+                City,
+                State,
+                ZipCode,
+                Country
+            };
+
+            if (lines.Any(x => !String.IsNullOrEmpty(x)))
+                return lines
+                    .Where(x => !String.IsNullOrWhiteSpace(x))
+                    .Aggregate((a, b) => a + Environment.NewLine + b);
+            else
+                return null;
+        }
     }
 }
