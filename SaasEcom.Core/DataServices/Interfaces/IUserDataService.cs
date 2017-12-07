@@ -15,5 +15,7 @@ namespace SaasEcom.Core.DataServices.Interfaces
 
         Task SaveAsync(SaasEcomUser user);
 
+
+        Task<SaasEcomUser> GetByIpAsync(string ip);
     }
 }
