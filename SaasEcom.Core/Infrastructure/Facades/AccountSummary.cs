@@ -23,6 +23,10 @@ namespace SaasEcom.Core.Infrastructure.Facades
         public DateTime? LastInvoiceDate { get; set; }
 
         public DateTime? LastInvoiceDue { get; set; }
+
+        public double CurrentSubValue { get; set; }
+
+        public DateTime StartDate { get; set; }
     }
 
 }

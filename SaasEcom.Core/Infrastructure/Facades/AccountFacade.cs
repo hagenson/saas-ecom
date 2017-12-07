@@ -69,7 +69,17 @@ namespace SaasEcom.Core.Infrastructure.Facades
             }
 
             var user = await userSvc.GetAsync(userId);
-            result.Name = user.FirstName + " " + user.LastName; 
+            result.Name = user.FirstName + " " + user.LastName;
+            result.CurrentSubValue = user.Subscriptions
+              .Where(s => !s.End.HasValue || s.End.Value > DateTime.Now)
+              .OrderByDescending(s => s.Start)
+              .Sum(s => s.SubscriptionPlan.Price);
+            var startSub = user.Subscriptions
+              .Where(s => s.Start.HasValue)
+              .OrderBy(s => s.Start)
+              .FirstOrDefault();
+            if (startSub != null)
+              result.StartDate = startSub.Start.Value;
             return result;
         }
     }
