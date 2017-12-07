@@ -55,10 +55,12 @@ namespace SaasEcom.Core.Infrastructure.Facades
       int matched = 0;
       foreach (Payment pmnt in unmatched)
       {
-        SaasEcomUser user = customers.FirstOrDefault(u =>
-            pmnt.Description.Contains(u.AccountNumber) ||
-            pmnt.Particulars.Contains(u.AccountNumber) ||
-            pmnt.Reference.Contains(u.AccountNumber));
+        SaasEcomUser user = customers.FirstOrDefault((u) =>
+          {
+            var acct = u.AccountNumber.ToUpper();
+            return (pmnt.Description + pmnt.Particulars).ToUpper().Contains(u.AccountNumber) ||
+            pmnt.Reference.ToUpper().Contains(u.AccountNumber);
+          });
         if (user != null)
         {
           pmnt.Customer = user;
