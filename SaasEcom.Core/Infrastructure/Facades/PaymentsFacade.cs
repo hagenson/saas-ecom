@@ -17,13 +17,15 @@ namespace SaasEcom.Core.Infrastructure.Facades
     private IIdentityMessageService messageSvc;
     private ITransactionLoader getter;
     private IPaymentParser parser;
+    private IInvoiceDataService invoices;
 
     public PaymentsFacade(
         IPaymentDataService payments,
         IUserDataService users,
         IIdentityMessageService messageSvc,
         ITransactionLoader getter,
-        IPaymentParser parser
+        IPaymentParser parser,
+        IInvoiceDataService invoices
         )
     {
       this.payments = payments;
@@ -31,6 +33,7 @@ namespace SaasEcom.Core.Infrastructure.Facades
       this.messageSvc = messageSvc;
       this.getter = getter;
       this.parser = parser;
+      this.invoices = invoices;
     }
 
     public async Task<bool> ImportPaymentAsync(Payment payment)
@@ -50,17 +53,39 @@ namespace SaasEcom.Core.Infrastructure.Facades
       List<Payment> unmatched = await payments.ListUnmatchedAsync();
       // Get the customers
       List<SaasEcomUser> customers = await users.GetAllAsync();
+      var invoiceList = await invoices.ListUnpaidInvoices();
 
       // Try to match them together
       int matched = 0;
       foreach (Payment pmnt in unmatched)
       {
+        var details = (pmnt.Description + pmnt.Particulars).ToUpper();
+        var refup = pmnt.Reference.ToUpper();
         SaasEcomUser user = customers.FirstOrDefault((u) =>
           {
+            //Try straight match
             var acct = u.AccountNumber.ToUpper();
-            return (pmnt.Description + pmnt.Particulars).ToUpper().Contains(u.AccountNumber) ||
-            pmnt.Reference.ToUpper().Contains(u.AccountNumber);
+            //Try ohs instead of zeros
+            var acctO = acct.Replace('0', 'O');
+            return details.Contains(acct) ||
+            refup.Contains(acct) ||
+            details.Contains(acctO) ||
+            refup.Contains(acctO);
           });
+
+        if (user == null)
+        {
+          // Try to match an invoice number
+          Invoice inv = invoiceList.FirstOrDefault((i) =>
+           {
+             var invId = i.Id.ToString().PadLeft(6, '0');
+             return details.Contains(invId) ||
+               refup.Contains(invId);
+           });
+
+          if (inv != null)
+            user = inv.Customer;
+        }
         if (user != null)
         {
           pmnt.Customer = user;
@@ -116,11 +141,11 @@ The Keyryx Team.
 
 
         messageSvc.Send(new IdentityMessage
-          {
-            Subject = String.Format("Payment of {0:C} received", amt),
-            Body = message,
-            Destination = pmt.Customer.Email
-          });
+        {
+          Subject = String.Format("Payment of {0:C} received", amt),
+          Body = message,
+          Destination = pmt.Customer.Email
+        });
 
         // Save the acknowledgement
         pmt.Acknowledged = true;
@@ -137,7 +162,7 @@ The Keyryx Team.
         end = DateTime.Now;
       }
 
-      if(!start.HasValue)
+      if (!start.HasValue)
       {
         // Get the date of the last payment imported
         Payment last = await payments.GetLastImported();
@@ -148,7 +173,7 @@ The Keyryx Team.
       }
 
       ImportResult result = new ImportResult();
-    
+
       using (var strm = getter.GetTransactions(start.Value, end.Value))
       {
         using (StreamReader reader = new StreamReader(strm))
