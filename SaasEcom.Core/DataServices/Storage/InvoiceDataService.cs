@@ -172,10 +172,10 @@ namespace SaasEcom.Core.DataServices.Storage
 
         public async Task<List<Invoice>> ListInvoicesForRunAsync(int invoiceRunId)
         {
-            return await _dbContext.Invoices
-                .Where(i => i.InvoiceRun_Id == invoiceRunId)
-                .Include(x => x.Reconciliations)
-                .ToListAsync();
+        return await _dbContext.Invoices
+          .Where(i => i.InvoiceRun_Id == invoiceRunId)
+          .Include(x => x.Reconciliations)
+          .ToListAsync();
         }
 
         public async Task<List<Invoice>> GetInvoicesAsync(IEnumerable<int> ids)

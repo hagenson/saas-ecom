@@ -29,6 +29,19 @@ namespace SaasEcom.Core.DataServices.Storage
         .ToListAsync();
     }
 
+    public async Task<List<OneOffCharge>> ListUninvoicedChargesForAllUsers()
+    {
+      return await context.OneOffCharges.Where(c => c.InvoiceId == null)
+        .ToListAsync();
+    }
+
+    public async Task Remove(int chargeId)
+    {
+      var toRemove = await context.OneOffCharges.FindAsync(chargeId);
+      context.OneOffCharges.Remove(toRemove);
+      await context.SaveChangesAsync();
+    }
+
     public async Task SaveAsync(OneOffCharge charge)
     {
       if (charge.Id == 0)

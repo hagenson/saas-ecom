@@ -9,7 +9,7 @@ namespace SaasEcom.Core.Models
   public class OneOffCharge
   {
     public int Id { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     public int Amount { get; set; }
     public decimal TaxPercent { get; set; }
     public string Category { get; set; }

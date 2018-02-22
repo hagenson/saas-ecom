@@ -11,7 +11,11 @@ namespace SaasEcom.Core.DataServices.Interfaces
   {
     Task<List<OneOffCharge>> ListUninvoicedChargesForUserAsync(string userId);
 
+    Task<List<OneOffCharge>> ListUninvoicedChargesForAllUsers();
+
     Task SaveAsync(OneOffCharge charge);
+
+    Task Remove(int chargeId); 
 
   }
 }
