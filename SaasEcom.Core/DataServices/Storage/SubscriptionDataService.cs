@@ -185,9 +185,12 @@ namespace SaasEcom.Core.DataServices.Storage
         /// </returns>
         public async Task<List<Subscription>> UserActiveSubscriptionsAsync(string userId)
         {
+            var periodStart = DateTime.Today;
+            periodStart = periodStart.AddDays(1 - periodStart.Day);
             return await _dbContext.Subscriptions
-                .Where(s => s.User.Id == userId && s.Status != "canceled" && s.Status != "unpaid")
-                .Where(s => s.End == null || s.End > DateTime.UtcNow)
+                .Where(s => s.User.Id == userId)
+                .Where(s => s.End == null || s.End > periodStart)
+                .Where(s => s.Start <= periodStart)
                 .Where(s => s.SubscriptionPlan.Interval > SubscriptionInterval.OneOff)
                 .Include(s => s.SubscriptionPlan.Properties)
                 .Select(s => s).ToListAsync();

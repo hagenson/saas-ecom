@@ -222,9 +222,9 @@ namespace SaasEcom.Core.Infrastructure.Facades
                 if(nxtSub != null)
                     await _subscriptionDataService.DeleteSubscriptionsAsync(nxtSub.Id.ToString());
 
-                // Do we need to put pro-rata bill in next periiod?
+                // Do we need to put pro-rata bill in next period?
                 Invoice invoice = curSub.User.Invoices.OrderBy(i => i.Date).LastOrDefault();
-                if (invoice != null && invoice.Date < periodStart)
+                if (invoice != null && invoice.Date > periodStart)
                 {
                   // Yes - work out the rate
                   double proRata = ((newSub.Quantity * newSub.SubscriptionPlan.Price) - (curSub.Quantity * curSub.SubscriptionPlan.Price)) * 100;

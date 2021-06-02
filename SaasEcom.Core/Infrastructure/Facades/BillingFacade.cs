@@ -82,7 +82,8 @@ namespace SaasEcom.Core.Infrastructure.Facades
           invoice.TaxPercent = sub.TaxPercent;
 
           // Is the sub due?
-          if (!sub.End.HasValue || (sub.End.Value > run.PeriodStart && sub.Start.HasValue && sub.Start.Value <= run.PeriodEnd))
+          if ((sub.Start.HasValue && sub.Start.Value <= run.PeriodEnd)
+            && (!sub.End.HasValue || sub.End.Value > run.PeriodStart))
           {
             // Get the subscription charge - may be pro-rated
             DateTime startDate = sub.Start.HasValue && sub.Start.Value > run.PeriodStart
@@ -95,22 +96,23 @@ namespace SaasEcom.Core.Infrastructure.Facades
             double ratio = !proRata ? 100
                 : (endDate - startDate).TotalDays / (run.PeriodEnd - run.PeriodStart).TotalDays * 100;
 
+            int amount = (int)(sub.SubscriptionPlan.Price * ratio);
             Invoice.LineItem itm = new Invoice.LineItem
             {
-              Amount = (int)(sub.SubscriptionPlan.Price * 100),
+              Amount = amount,
               Currency = sub.SubscriptionPlan.Currency,
               Period = new Invoice.Period { Start = startDate, End = endDate },
-              Proration = startDate != run.PeriodStart || endDate != run.PeriodEnd,
+              Proration = proRata,
               Quantity = sub.Quantity,
               Type = sub.SubscriptionPlan.Name,
               Plan = new Invoice.Plan
               {
-                AmountInCents = (int)(sub.SubscriptionPlan.Price * ratio),
+                AmountInCents = amount,
                 Created = sub.Start,
                 Currency = sub.SubscriptionPlan.Currency,
                 Interval = sub.SubscriptionPlan.Interval.ToString(),
                 IntervalCount = 1,
-                Name = sub.SubscriptionPlan.Name,
+                Name = $"{sub.SubscriptionPlan.Name}{(proRata ? $" ({sub.SubscriptionPlan.Price.ToString("C")} prorata {(ratio / 100).ToString("P0")})": "")}",
                 SubscriptionPlanId = sub.SubscriptionPlanId,
                 TrialPeriodDays = (sub.TrialEnd.HasValue && sub.TrialEnd.HasValue
                   ? (int?)(sub.TrialEnd.Value - sub.TrialStart.Value).TotalDays
